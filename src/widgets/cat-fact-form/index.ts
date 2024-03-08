@@ -1,0 +1,1 @@
+export {CatFactForm} from './CatFactForm.tsx'

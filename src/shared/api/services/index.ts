@@ -1,0 +1,1 @@
+export {getCatFact} from './catFactService.tsx'

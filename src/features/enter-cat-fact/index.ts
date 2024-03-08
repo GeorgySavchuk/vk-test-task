@@ -1,0 +1,1 @@
+export {EnterCatFact} from './EnterCatFact.tsx'
