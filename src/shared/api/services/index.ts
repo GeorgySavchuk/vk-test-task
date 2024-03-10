@@ -1,1 +1,1 @@
-export {getCatFact} from './catFactService.tsx'
+export {getCatFact} from './catService.ts'

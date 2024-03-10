@@ -14,10 +14,9 @@ export const EnterCatFact : React.FC = () => {
         }
     }, [catFact, isError]);
     useEffect(() => {
-        if (input && textAreaRef.current) {
-            const newPointerPosition = input.trim().split(' ')[0].length
+        if (input && textAreaRef.current && input === catFact.fact) {
+            const newPointerPosition = input.trim().split(" ")[0].length
             textAreaRef.current.setSelectionRange(newPointerPosition, newPointerPosition)
-            console.log(textAreaRef.current.selectionStart)
             textAreaRef.current.focus()
         }
     }, [input]);

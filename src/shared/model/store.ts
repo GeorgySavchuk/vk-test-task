@@ -1,7 +1,10 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import {catFactReducer} from './slices'
+import {personFormReducer} from "./slices";
+
 const rootReducer = combineReducers({
-    catFactReducer
+    catFactReducer,
+    personFormReducer
 })
 
 export const setupStore = () => {

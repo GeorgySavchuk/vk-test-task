@@ -8,7 +8,7 @@ import {
     PanelHeader,
     SplitCol,
     SplitLayout,
-    useAdaptivityConditionalRender,
+    useAdaptivityWithJSMediaQueries,
     View,
 } from "@vkontakte/vkui";
 
@@ -17,8 +17,9 @@ import {CatFactForm} from "../widgets/cat-fact-form";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Provider} from "react-redux";
 import {setupStore} from "../shared/model/store.ts";
+import {PersonAgeForm} from "../widgets/person-age-form";
 export const App : React.FC = () => {
-    const { viewWidth } = useAdaptivityConditionalRender()
+    const { isDesktop } = useAdaptivityWithJSMediaQueries()
     const [panel, setPanel] = useState<string>("Часть 1")
     const panels = ["Часть 1", "Часть 2"]
     return (
@@ -31,11 +32,12 @@ export const App : React.FC = () => {
                                 style={{
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    marginTop: "1rem"
+                                    marginTop: 0,
+                                    padding: "1rem"
                                 }}
                                 header={<PanelHeader delimiter="none">Профильное задание</PanelHeader>}
                             >
-                                {viewWidth.tabletPlus && (
+                                {isDesktop && (
                                     <SplitCol width={280} maxWidth={280}>
                                         <Panel>
                                             <Group>
@@ -49,12 +51,15 @@ export const App : React.FC = () => {
                                     </SplitCol>
                                 )}
                                 <SplitCol width="100%" maxWidth="450px" autoSpaced>
-                                    <View
-                                        activePanel={panel}
-                                    >
+                                    <View activePanel={panel}>
                                         <Panel id="Часть 1">
                                             <Group>
                                                 <CatFactForm/>
+                                            </Group>
+                                        </Panel>
+                                        <Panel id="Часть 2">
+                                            <Group>
+                                                <PersonAgeForm/>
                                             </Group>
                                         </Panel>
                                     </View>

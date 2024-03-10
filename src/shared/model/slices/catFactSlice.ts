@@ -29,5 +29,9 @@ const catFactSlice = createSlice({
         }
     }
 })
-export const {setCatFact, setError, setWasRequested} = catFactSlice.actions
+export const {
+    setCatFact,
+    setError,
+    setWasRequested
+} = catFactSlice.actions
 export default catFactSlice.reducer

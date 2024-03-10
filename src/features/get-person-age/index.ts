@@ -1,0 +1,1 @@
+export {GetPersonAge} from './GetPersonAge.tsx'

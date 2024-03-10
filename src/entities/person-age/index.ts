@@ -1,0 +1,1 @@
+export {PersonAge} from './PersonAge.tsx'
