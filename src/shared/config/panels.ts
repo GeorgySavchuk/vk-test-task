@@ -1,0 +1,1 @@
+export const PANELS = ["Часть 1", "Часть 2"]

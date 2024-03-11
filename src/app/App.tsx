@@ -5,7 +5,6 @@ import {
     Cell,
     ConfigProvider, Group,
     Panel,
-    PanelHeader,
     SplitCol,
     SplitLayout,
     useAdaptivityWithJSMediaQueries,
@@ -18,10 +17,10 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Provider} from "react-redux";
 import {setupStore} from "../shared/model/store.ts";
 import {PersonAgeForm} from "../widgets/person-age-form";
+import {PANELS} from "../shared/config";
 export const App : React.FC = () => {
-    const { isDesktop } = useAdaptivityWithJSMediaQueries()
+    const { isDesktop} = useAdaptivityWithJSMediaQueries()
     const [panel, setPanel] = useState<string>("Часть 1")
-    const panels = ["Часть 1", "Часть 2"]
     return (
         <Provider store={setupStore()}>
             <QueryClientProvider client={new QueryClient()}>
@@ -31,35 +30,36 @@ export const App : React.FC = () => {
                             <SplitLayout
                                 style={{
                                     justifyContent: "center",
-                                    alignItems: "center",
-                                    marginTop: 0,
-                                    padding: "1rem"
+                                    marginTop: isDesktop ? '1rem' : 0
                                 }}
-                                header={<PanelHeader delimiter="none">Профильное задание</PanelHeader>}
                             >
-                                {isDesktop && (
-                                    <SplitCol width={280} maxWidth={280}>
-                                        <Panel>
-                                            <Group>
-                                                {panels.map((i) => (
-                                                    <Cell key={i} hovered={i === panel} onClick={() => setPanel(i)}>
-                                                        {i}
-                                                    </Cell>
-                                                ))}
-                                            </Group>
-                                        </Panel>
-                                    </SplitCol>
-                                )}
+                                {
+                                    isDesktop && (
+                                        <SplitCol width={280} maxWidth={280}>
+                                            <Panel>
+                                                <Group>
+                                                    {PANELS.map((i) => (
+                                                        <Cell key={i} hovered={i === panel} onClick={() => setPanel(i)}>
+                                                            {i}
+                                                        </Cell>
+                                                    ))}
+                                                </Group>
+                                            </Panel>
+                                        </SplitCol>
+                                    )
+                                }
                                 <SplitCol width="100%" maxWidth="450px" autoSpaced>
                                     <View activePanel={panel}>
                                         <Panel id="Часть 1">
                                             <Group>
                                                 <CatFactForm/>
+                                                {!isDesktop && <Cell onClick={() => setPanel("Часть 2")}>Часть 2</Cell>}
                                             </Group>
                                         </Panel>
                                         <Panel id="Часть 2">
                                             <Group>
                                                 <PersonAgeForm/>
+                                                {!isDesktop && <Cell onClick={() => setPanel("Часть 1")}>Часть 1</Cell>}
                                             </Group>
                                         </Panel>
                                     </View>
