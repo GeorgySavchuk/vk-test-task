@@ -1,10 +1,12 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import {catFactReducer} from './slices'
 import {personFormReducer} from "./slices";
+import {panelReducer} from "./slices";
 
 const rootReducer = combineReducers({
     catFactReducer,
-    personFormReducer
+    personFormReducer,
+    panelReducer
 })
 
 export const setupStore = () => {

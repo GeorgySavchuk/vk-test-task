@@ -1,11 +1,12 @@
-import React  from 'react';
+import React from 'react';
 import {Button} from "@vkontakte/vkui";
+
 interface GetPersonAgeProps {
     isLoading: boolean;
     isRefetching: boolean;
 }
 
-export const GetPersonAge : React.FC<GetPersonAgeProps> = ({isLoading, isRefetching}) => {
+export const GetPersonAge: React.FC<GetPersonAgeProps> = ({isLoading, isRefetching}) => {
     return (
         <Button
             appearance="accent-invariable"

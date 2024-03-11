@@ -3,12 +3,14 @@ interface PersonFormState {
     wasSubmitted: boolean;
     firstVisit: boolean;
     isEmptyRequest: boolean;
+    previousRequest: string;
 }
 
 const initialState: PersonFormState = {
     wasSubmitted: false,
     firstVisit: true,
-    isEmptyRequest: true
+    isEmptyRequest: true,
+    previousRequest: ""
 }
 
 const personFormSlice = createSlice({
@@ -23,12 +25,16 @@ const personFormSlice = createSlice({
         },
         setIsEmptyRequest: (state = initialState, action: PayloadAction<boolean>) => {
             state.isEmptyRequest = action.payload
+        },
+        setPreviousRequest: (state = initialState, action: PayloadAction<string>) => {
+            state.previousRequest = action.payload
         }
     }
 })
 export const {
     setWasSubmitted,
     setFirstVisit,
-    setIsEmptyRequest
+    setIsEmptyRequest,
+    setPreviousRequest
 } = personFormSlice.actions
 export default personFormSlice.reducer

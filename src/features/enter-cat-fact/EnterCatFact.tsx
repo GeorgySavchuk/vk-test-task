@@ -2,7 +2,7 @@ import React, {FormEvent, useEffect, useRef, useState} from 'react';
 import {Textarea} from "@vkontakte/vkui";
 import {useAppSelector} from "../../shared/lib";
 
-export const EnterCatFact : React.FC = () => {
+export const EnterCatFact: React.FC = () => {
     const {catFact, isError} = useAppSelector(state => state.catFactReducer)
     const [input, setInput] = useState<string>("")
     const textAreaRef = useRef<HTMLTextAreaElement>(null)

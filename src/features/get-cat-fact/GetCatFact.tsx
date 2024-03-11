@@ -6,7 +6,7 @@ import {setCatFact} from "../../shared/model";
 import {setError, setWasRequested} from "../../shared/model/slices/catFactSlice.ts";
 import {useQuery} from "@tanstack/react-query";
 
-export const GetCatFact : React.FC = () => {
+export const GetCatFact: React.FC = () => {
     const {data, refetch, isLoading, isRefetching, isError} = useQuery({
         queryKey: ["cat-fact"],
         queryFn: getCatFact,
@@ -15,10 +15,10 @@ export const GetCatFact : React.FC = () => {
     const {wasRequested} = useAppSelector(state => state.catFactReducer)
     const dispatch = useAppDispatch()
     useEffect(() => {
-        if (wasRequested && data){
+        if (wasRequested && data) {
             dispatch(setError(false))
             dispatch(setCatFact(data))
-        } else if (isError || (wasRequested && !data)){
+        } else if (isError || (wasRequested && !data)) {
             dispatch(setError(true))
         }
     }, [data, isError])

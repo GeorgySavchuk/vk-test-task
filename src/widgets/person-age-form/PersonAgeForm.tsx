@@ -1,16 +1,16 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {FormItem} from "@vkontakte/vkui";
 import {EnterPersonName} from "../../features/enter-person-name";
 import {GetPersonAge} from "../../features/get-person-age";
 import {useAppDispatch, useAppSelector, useDebounce} from "../../shared/lib";
 import {PersonAge} from "../../entities/person-age";
-import {setFirstVisit, setIsEmptyRequest, setWasSubmitted} from "../../shared/model";
+import {setFirstVisit, setIsEmptyRequest, setPreviousRequest, setWasSubmitted} from "../../shared/model";
 import {useQuery} from "@tanstack/react-query";
-import {getPersonAge} from "../../shared/api/services/personService.ts";
+import {getPersonAge} from "../../shared/api";
 import {Controller, SubmitHandler, useController, useForm} from "react-hook-form";
 import {IPersonAgeFormValues} from "../../shared/api";
 
-export const PersonAgeForm : React.FC = () => {
+export const PersonAgeForm: React.FC = () => {
     const {
         handleSubmit,
         formState: {errors},
@@ -29,9 +29,8 @@ export const PersonAgeForm : React.FC = () => {
             }
         }
     })
-    const {wasSubmitted, firstVisit, isEmptyRequest} = useAppSelector(state => state.personFormReducer)
+    const {wasSubmitted, firstVisit, isEmptyRequest, previousRequest} = useAppSelector(state => state.personFormReducer)
     const debouncedPersonName = useDebounce<string>(field.value)
-    const [previousRequest, setPreviousRequest] = useState<string>("")
     const {data, refetch, isLoading, isRefetching, isFetched} = useQuery({
         queryKey: ["person"],
         queryFn: () => getPersonAge(field.value),
@@ -41,7 +40,7 @@ export const PersonAgeForm : React.FC = () => {
     const formRef = useRef<HTMLFormElement>(null)
     const confirmPersonName: SubmitHandler<IPersonAgeFormValues> = async () => {
         if (field.value !== previousRequest) {
-            setPreviousRequest(field.value)
+            dispatch(setPreviousRequest(field.value))
             dispatch(setWasSubmitted(true))
             await refetch()
             dispatch(setWasSubmitted(false))
@@ -73,8 +72,13 @@ export const PersonAgeForm : React.FC = () => {
         }
     }, [data])
     return (
-        <form onSubmit={handleSubmit(confirmPersonName)} ref={formRef} >
-            <FormItem htmlFor="personName" top="Имя" bottom={errors.name && errors.name.message} status={errors.name ? "error" : "default"}>
+        <form onSubmit={handleSubmit(confirmPersonName)} ref={formRef}>
+            <FormItem
+                htmlFor="personName"
+                top="Имя"
+                bottom={errors.name && errors.name.message}
+                status={errors.name ? "error" : "default"}
+            >
                 <Controller
                     name="name"
                     control={control}
