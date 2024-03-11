@@ -7,9 +7,7 @@ export const EnterCatFact : React.FC = () => {
     const [input, setInput] = useState<string>("")
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
     useEffect(() => {
-        if (isError) {
-            setInput("Произошла ошибка при запросе!")
-        } else {
+        if (!isError) {
             setInput(catFact.fact)
         }
     }, [catFact, isError]);
@@ -30,7 +28,7 @@ export const EnterCatFact : React.FC = () => {
             rows={7}
             onChange={handleChange}
             grow={true}
-            status={isError ? "error" : "default"}
+            id="catFact"
             getRef={textAreaRef}
         />
     );
