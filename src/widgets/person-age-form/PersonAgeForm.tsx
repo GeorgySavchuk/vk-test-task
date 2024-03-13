@@ -1,21 +1,24 @@
 import React, {useEffect, useRef} from 'react';
-import {FormItem} from "@vkontakte/vkui";
+import {Button, FormItem} from "@vkontakte/vkui";
 import {EnterPersonName} from "../../features/enter-person-name";
 import {GetPersonAge} from "../../features/get-person-age";
 import {useAppDispatch, useAppSelector, useDebounce} from "../../shared/lib";
 import {PersonAge} from "../../entities/person-age";
 import {setFirstVisit, setIsEmptyRequest, setPreviousRequest, setWasSubmitted} from "../../shared/model";
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {getPersonAge} from "../../shared/api";
 import {Controller, SubmitHandler, useController, useForm} from "react-hook-form";
 import {IPersonAgeFormValues} from "../../shared/api";
 
 export const PersonAgeForm: React.FC = () => {
+    const dispatch = useAppDispatch()
+    const formRef = useRef<HTMLFormElement>(null)
+    const queryClient = useQueryClient()
     const {
         handleSubmit,
         formState: {errors},
         control,
-        setError
+        setError,
     } = useForm<IPersonAgeFormValues>()
     const {field} = useController({
         name: "name",
@@ -33,11 +36,10 @@ export const PersonAgeForm: React.FC = () => {
     const debouncedPersonName = useDebounce<string>(field.value)
     const {data, refetch, isLoading, isRefetching, isFetched} = useQuery({
         queryKey: ["person"],
-        queryFn: () => getPersonAge(field.value),
+        queryFn: ({signal}) => getPersonAge(field.value, signal),
         enabled: false
     })
-    const dispatch = useAppDispatch()
-    const formRef = useRef<HTMLFormElement>(null)
+
     const confirmPersonName: SubmitHandler<IPersonAgeFormValues> = async () => {
         if (field.value !== previousRequest) {
             dispatch(setPreviousRequest(field.value))
@@ -88,12 +90,17 @@ export const PersonAgeForm: React.FC = () => {
                 />
             </FormItem>
             {
-                (isFetched && !isEmptyRequest && data?.age) && <FormItem htmlFor="personAge" top="Возраст">
+                (!isEmptyRequest && data?.age && !isLoading && !isRefetching) && <FormItem htmlFor="personAge" top="Возраст">
                     <PersonAge age={data.age}/>
                 </FormItem>
             }
-            <FormItem>
-                <GetPersonAge isLoading={isLoading} isRefetching={isRefetching}/>
+            <FormItem style={{
+                display: 'flex',
+                alignItems: 'center',
+                columnGap: '.5rem'
+            }}>
+                <GetPersonAge formRef={formRef} queryClient={queryClient} isRequestNotProcessed={isRefetching || isLoading}/>
+                {(isLoading || isRefetching) && <Button appearance="accent-invariable" size="m" loading={true}/>}
             </FormItem>
         </form>
     );
