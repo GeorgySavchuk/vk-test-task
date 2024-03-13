@@ -6,12 +6,14 @@ interface EnterPersonNameProps {
     field: ControllerRenderProps<IPersonAgeFormValues, "name">
 }
 
-export const EnterPersonName : React.FC<EnterPersonNameProps> = ({field}) => {
+export const EnterPersonName: React.FC<EnterPersonNameProps> = (({field}) => {
     return (
         <Input
             id="personName"
             placeholder="Введите имя"
-            {...field}
+            onBlur={field.onBlur}
+            onChange={field.onChange}
+            getRef={field.ref}
         />
     );
-};
+});
